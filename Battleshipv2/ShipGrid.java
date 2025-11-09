@@ -38,6 +38,7 @@ public class ShipGrid extends JComponent
      }
     }
     
+    
     /** Updates the grid by passing updated Arrays
      * @param shipArray the shipArray to update 
      * @param shipPlacingArray the shipPlacingArray to update
@@ -52,13 +53,19 @@ public class ShipGrid extends JComponent
 
     /** paints the JComponent by drawing a ship grid on it
      * @param g the Graphics class
+     * @Override
     */
     public void paintComponent(Graphics g) 
     {
             super.paintComponent(g);
-            Graphics2D g2 = (Graphics2D)g;
-            double scaleX = this.getWidth()/22;
-            double scaleY = this.getHeight()/22;
+            Graphics2D g2 = (Graphics2D) g.create();
+        
+            //Enable high-quality rendering
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            double scaleX = (double)this.getWidth()/22.0;
+            double scaleY = (double)this.getHeight()/22.0;
+            
             g2.setStroke(new BasicStroke(1.0F / this.getWidth()));
             g2.scale(scaleX,scaleY);
 
@@ -171,5 +178,7 @@ public class ShipGrid extends JComponent
             g2.drawString("7",0,18);
             g2.drawString("8",0,20);
             g2.drawString("9", 0, 22);
+            //Clean up Graphics copy
+            g2.dispose();
     }
 }

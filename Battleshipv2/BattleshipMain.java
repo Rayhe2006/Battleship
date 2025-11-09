@@ -1,5 +1,6 @@
 import javax.swing.UIManager.*;
 import javax.swing.*;
+import java.awt.*;
 
 /** Battleship Program
   * Play a game of Battleship against a smart Computer
@@ -32,5 +33,6 @@ public class BattleshipMain {
     frame.setLocation(0, 0);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setVisible(true);
+    frame.setSize(600,500);
   }
 }

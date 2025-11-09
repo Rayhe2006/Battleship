@@ -15,18 +15,18 @@ public class BattleshipView extends JPanel {
   private ShipGrid playerHitsAndMisses;// A hit and misses grid for the player
   // First screen
   private JTextField roundsOfPlay = new JTextField(2); // TextField for the amount of rounds the user wants to play
-  private JButton startGame = new JButton(); // Button to start the game
+  private JButton startGame = new JButton(); // =]utton to start the game
   private JPanel oldGameStatsPanel = new JPanel(); //The panel that the old game stats JButton
   private JButton oldGameStats = new JButton("View Old Game Stats"); // Button to display the old game stats
  
   // Game info
-  private JTextField colAndRow = new JTextField(2); // JTextField for the column
+  private JTextField colAndRow = new JTextField(2); // JTextField for the column & row
   private JButton launchMissile = new JButton("Launch Missile"); // Button to launch a missile
   private JLabel roundNumberLabel = new JLabel("Round: "); // Displays the number of rounds
   private JLabel logLabel = new JLabel("Logs:"); // Logs the computer and player actions
  
   private JButton restartGame = new JButton("Restart Game"); // Restarts the game
-  private JLabel instructions = new JLabel("Press arrow keys to move a ship around. Press Enter to place a ship. R to Rotate.");
+  private JPanel instructionsPanel = new JPanel();
 
   private JPanel endRoundStats = new JPanel();
   private JLabel numComputerShips = new JLabel("Num Computer Ships: ");
@@ -86,7 +86,7 @@ public class BattleshipView extends JPanel {
    */
   public void layoutView() {
     // Setting the main layout to a border layout
-    this.setLayout(new BorderLayout());
+    this.setLayout(new CardLayout());
     // First screen
     JPanel startGamePanel = new JPanel();
     JPanel statsPanel = new JPanel();
@@ -110,33 +110,33 @@ public class BattleshipView extends JPanel {
     // Setting the font of the JTextField
     this.roundsOfPlay.setFont(basicFont);
     // Setting preferred sizes of JComponents
-    this.roundsOfPlay.setPreferredSize(new Dimension(50, 50));
-    oldGameStats.setPreferredSize(new Dimension(300, 50));
-    oldGameStats.setFont(new Font("Arial", Font.PLAIN, 20));
+    this.roundsOfPlay.setPreferredSize(new Dimension(100, 100));
+    oldGameStats.setPreferredSize(new Dimension(600, 100));
+    oldGameStats.setFont(new Font("Arial", Font.PLAIN, 40));
 
-    // Adding components to JPanel so that we can modify its font?
+    // Adding components to JPanel so that we can modify its font
     roundsOfPlayPanel.add(roundsOfPlay);
     oldGameStatsPanel.add(oldGameStats);
 
     // Setting the title panel, which is used for the title to a flow layout
     titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
+
     // Setting font and size and, alligning the title to the middle
-    title.setFont(new Font("Arial", Font.PLAIN, 28));
+    title.setFont(new Font("SansSerif", Font.BOLD, 40));
     title.setHorizontalAlignment(JLabel.CENTER);
     title.setVerticalAlignment(JLabel.CENTER);
-    title.setPreferredSize(new Dimension(200, 50));
 
     // Adding Battleship Java title to a title JPanel
     titlePanel.add(title);
 
     // Setting the Start game buttons size, border, backround, text and if its
-    startGame.setPreferredSize(new Dimension(150, 90));
+    startGame.setPreferredSize(new Dimension(500, 200));
     startGame.setBorder(BorderFactory.createEtchedBorder());
     startGame.setBackground(new Color(50, 168, 88));
     startGame.setText("Start Game");
-    startGame.setFont(basicFont);
+    startGame.setFont(new Font("SansSerif", Font.PLAIN, 30));
 
-    // Setting the start game panel which is the panel that contains the start game
+    // Setting the start game panel which is the panel that contain0s the start game
     startGamePanel.setLayout(new BoxLayout(startGamePanel, BoxLayout.PAGE_AXIS));
 
     // Adding Start Game Button to button panel
@@ -167,6 +167,8 @@ public class BattleshipView extends JPanel {
     // Adding both grid panels to a main grid panel
     gridPanel.add(shipGridPanel);
     gridPanel.add(hitsAndMissesPanel);
+    //Setting the gridPanel border
+    gridPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY,2));
     // Second screen placing ships panel
     // Setting place ships panel to a box layout
     placeShipsPanel.setLayout(new BoxLayout(placeShipsPanel, BoxLayout.PAGE_AXIS));
@@ -175,7 +177,7 @@ public class BattleshipView extends JPanel {
     gameInfo.setLayout(new BoxLayout(gameInfo, BoxLayout.PAGE_AXIS));
     // Setting its border
     gameInfo.setBorder(BorderFactory.createTitledBorder("Game Info"));
-
+    gameInfo.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2));
     // Adding game info to its JPanel
     gameInfo.add(this.roundNumberLabel);
     gameInfo.add(this.logLabel);
@@ -186,11 +188,45 @@ public class BattleshipView extends JPanel {
     gameInfo.add(this.launchMissile);
     gameInfo.add(this.restartGame);
 
-    // Setting battle screen to border layout
-    // Adding the grids game info and placeships to its panel(One of them will be false in visibility either placeShipsPanel or gameInfo)
-    battleScreen.add(gridPanel);
-    battleScreen.add(gameInfo);
-    battleScreen.add(instructions);
+
+    //Creating a a splitPane so that scaling issues are fixed
+    JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+    splitPane.setTopComponent(gridPanel);
+    splitPane.setBottomComponent(gameInfo);
+    splitPane.setResizeWeight(0.8); // 80% top (grids), 20% bottom (info)
+    splitPane.setDividerSize(4);
+    splitPane.setContinuousLayout(true);
+
+    //Making the instructionsPanel look better
+    instructionsPanel.setLayout(new BoxLayout(instructionsPanel, BoxLayout.Y_AXIS));
+    instructionsPanel.setBackground(new Color(30,50,90));
+    instructionsPanel.setPreferredSize(new Dimension(100, 120));
+
+    JLabel instructionsLabel = new JLabel("Welcome to Battleship!");
+    instructionsLabel.setFont(new Font("SansSerif", Font.BOLD, 28));
+    instructionsLabel.setForeground(Color.WHITE);
+    instructionsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+    JLabel line1 = new JLabel("Use arrow keys to move ships around.");
+    line1.setFont(new Font("SansSerif", Font.BOLD, 20));
+    line1.setForeground(Color.WHITE);
+    line1.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+    JLabel line2 = new JLabel("Use the r key to rotate ships and enter key to place them");
+    line2.setFont(new Font("SansSerif", Font.BOLD, 20));
+    line2.setForeground(Color.WHITE);
+    line2.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+    instructionsPanel.add(instructionsLabel);
+    instructionsPanel.add(Box.createVerticalStrut(15)); // blank line
+    instructionsPanel.add(line1);
+    instructionsPanel.add(Box.createVerticalStrut(10)); // another blank line
+    instructionsPanel.add(line2);
+
+    battleScreen.setLayout(new BorderLayout());
+    battleScreen.add(splitPane, BorderLayout.CENTER);
+    battleScreen.add(instructionsPanel, BorderLayout.SOUTH);
+
     //Show old game stats
     oldGScrollPane.setPreferredSize(new Dimension(450,110));
     enterGameNumPanel.add(enterGameNum);
@@ -200,9 +236,9 @@ public class BattleshipView extends JPanel {
     gameNumPanel.add(exitOldGameStats);
     oldGameStatsArea.setEnabled(true);
     // Adding start screen and battle screen to the View
-    this.add(startPanel, BorderLayout.NORTH);
-    this.add(battleScreen, BorderLayout.SOUTH);
-    this.add(gameNumPanel, BorderLayout.EAST);
+    this.add(startPanel, "Start");
+    this.add(battleScreen, "Battle");
+    this.add(gameNumPanel, "Stats");
     // Visibility statements used to switch views
     startPanel.setVisible(true);
     gameInfo.setVisible(false);
@@ -270,8 +306,6 @@ public class BattleshipView extends JPanel {
       this.placeShipsPanel.setVisible(false);
       this.battleScreen.setVisible(false);
       gameNumPanel.setVisible(false);
-      //Resizes frame to fit the game
-      mainFrame.pack();
       //Else if the game state is in the placing ships game state
     } else if (this.battleshipModel.getGameState() == this.battleshipModel.STATE_PLACING_SHIPS) {
       this.startPanel.setVisible(false);
@@ -279,9 +313,7 @@ public class BattleshipView extends JPanel {
       this.placeShipsPanel.setVisible(true);
       this.battleScreen.setVisible(true);
       gameNumPanel.setVisible(false);
-      this.instructions.setVisible(true);
-      //Resizes frame to fit the game
-      mainFrame.pack();
+      this.instructionsPanel.setVisible(true);
       //Else if the game state is in in game state
     } else if (this.battleshipModel.getGameState() == this.battleshipModel.STATE_IN_GAME) {
       this.startPanel.setVisible(false);
@@ -289,9 +321,7 @@ public class BattleshipView extends JPanel {
       this.placeShipsPanel.setVisible(false);
       this.battleScreen.setVisible(true);
       gameNumPanel.setVisible(false);
-      this.instructions.setVisible(false);
-      //Resizes frame to fit the game
-      mainFrame.pack();
+      this.instructionsPanel.setVisible(false);
       //Else if the game state is in the game over state
     } else if (this.battleshipModel.getGameState() == this.battleshipModel.STATE_GAME_OVER) {
       this.startPanel.setVisible(true);
@@ -299,13 +329,10 @@ public class BattleshipView extends JPanel {
       this.placeShipsPanel.setVisible(false);
       this.battleScreen.setVisible(false);
       gameNumPanel.setVisible(false);
-      //Resizes frame to fit the game
-      mainFrame.pack();
       //Else if the game state is in the game over state
     } else if (this.battleshipModel.getGameState() == this.battleshipModel.STATE_SHOW_ROUND_STATS) {
       this.endRoundStats.setVisible(true);
       JOptionPane.showMessageDialog(null, this.endRoundStats, "End Round Stats", JOptionPane.INFORMATION_MESSAGE);
-      mainFrame.pack();
     }
     else if(this.battleshipModel.getGameState() == this.battleshipModel.STATE_SHOW_OLD_GAME_STATS)
     {
@@ -314,8 +341,6 @@ public class BattleshipView extends JPanel {
       this.placeShipsPanel.setVisible(false);
       this.battleScreen.setVisible(false);
       gameNumPanel.setVisible(true);
-      //Resizes frame to fit the game
-      mainFrame.pack();
     }
     
 
